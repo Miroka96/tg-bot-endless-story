@@ -44,12 +44,7 @@ func processStart(update tgbotapi.Update) tgbotapi.MessageConfig {
 }
 
 func processShowStory(update tgbotapi.Update) tgbotapi.MessageConfig {
-
 	return tgbotapi.NewMessage(update.Message.Chat.ID, GetStory(update))
-}
-
-func processShowSummary(update tgbotapi.Update) tgbotapi.MessageConfig {
-	return tgbotapi.NewMessage(update.Message.Chat.ID, Conf.Language.NotYetImplemented)
 }
 
 func processHelp(update tgbotapi.Update) tgbotapi.MessageConfig {
@@ -69,8 +64,6 @@ func processCommand(update tgbotapi.Update) tgbotapi.MessageConfig {
 		return processStart(update)
 	case Conf.Language.CommandShowStory:
 		return processShowStory(update)
-	case Conf.Language.CommandShowSummary:
-		return processShowSummary(update)
 	case "hi":
 		return tgbotapi.NewMessage(update.Message.Chat.ID, Conf.Language.GenericAlive)
 	default:
@@ -83,7 +76,6 @@ func processResponse(update tgbotapi.Update) []tgbotapi.MessageConfig {
 	var responses []tgbotapi.MessageConfig
 	if UserInTurn(update.Message.Chat.ID) {
 		responses = AppendStory(update, update.Message.Text)
-		responses = append(responses, tgbotapi.NewMessage(update.Message.Chat.ID, Conf.Language.NextUsersTurn))
 	} else {
 		responses = []tgbotapi.MessageConfig{tgbotapi.NewMessage(update.Message.Chat.ID, Conf.Language.NotYourTurn)}
 	}

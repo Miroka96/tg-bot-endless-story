@@ -14,20 +14,18 @@ const languageFilePattern = "conf/language.%s.json"
 var Conf *Configuration
 
 type Language struct {
-	NotUnderstood                 string `json:"not_understood"`
-	CliWelcome                    string `json:"CLI_welcome"`
-	GenericError                  string `json:"generic_error"`
-	GenericAlive                  string `json:"generic_alive"`
-	UserWelcome                   string `json:"user_welcome"`
-	IntroductionPreviousStory     string `json:"introduction_previous_story"`
-	IntroductionNewStory          string `json:"introduction_new_story"`
-	CommandShowStory              string `json:"command_show_story"`
-	CommandShowStoryDescription   string `json:"command_show_story_description"`
-	CommandShowSummary            string `json:"command_show_summary"`
-	CommandShowSummaryDescription string `json:"command_show_summary_description"`
-	NextUsersTurn                 string `json:"next_users_turn"`
-	NotYourTurn                   string `json:"not_your_turn"`
-	NotYetImplemented             string `json:"not_yet_implemented"`
+	NotUnderstood               string `json:"not_understood"`
+	CliWelcome                  string `json:"CLI_welcome"`
+	GenericError                string `json:"generic_error"`
+	GenericAlive                string `json:"generic_alive"`
+	UserWelcome                 string `json:"user_welcome"`
+	IntroductionPreviousStory   string `json:"introduction_previous_story"`
+	IntroductionNewStory        string `json:"introduction_new_story"`
+	CommandShowStory            string `json:"command_show_story"`
+	CommandShowStoryDescription string `json:"command_show_story_description"`
+	NextUsersTurn               string `json:"next_users_turn"`
+	NotYourTurn                 string `json:"not_your_turn"`
+	NotYetImplemented           string `json:"not_yet_implemented"`
 }
 
 type Configuration struct {
