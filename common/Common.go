@@ -7,3 +7,7 @@ func Check(e error) {
 		log.Panic(e)
 	}
 }
+
+func Fatal(msg string) {
+	log.Panic(msg)
+}

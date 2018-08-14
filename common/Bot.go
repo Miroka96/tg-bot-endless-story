@@ -30,44 +30,69 @@ func getUpdates(bot *tgbotapi.BotAPI) tgbotapi.UpdatesChannel {
 	return updates
 }
 
-func processStart(update tgbotapi.Update) tgbotapi.MessageConfig {
-	var response = Conf.Language.UserWelcome
-	response += "\n\n"
+func processStart(update tgbotapi.Update) []tgbotapi.MessageConfig {
+	var welcomeResponse = Conf.Language.UserWelcome
+	welcomeResponse += "\n\n"
 
 	if GetStory(update) == "" {
-		response += Conf.Language.IntroductionNewStory
+		welcomeResponse += Conf.Language.IntroductionNewStory
 	} else {
-		response += fmt.Sprintf(Conf.Language.IntroductionPreviousStory, story)
+		welcomeResponse += fmt.Sprintf(Conf.Language.IntroductionPreviousStory, story)
 	}
 
-	return tgbotapi.NewMessage(update.Message.Chat.ID, response)
+	return []tgbotapi.MessageConfig{
+		tgbotapi.NewMessage(update.Message.Chat.ID, welcomeResponse),
+		processHelp(update),
+	}
 }
 
 func processShowStory(update tgbotapi.Update) tgbotapi.MessageConfig {
 	return tgbotapi.NewMessage(update.Message.Chat.ID, GetStory(update))
 }
 
+var helpMessage = ""
+
 func processHelp(update tgbotapi.Update) tgbotapi.MessageConfig {
-	return tgbotapi.NewMessage(update.Message.Chat.ID, Conf.Language.NotYetImplemented)
+	if helpMessage == "" {
+		var helpActions strings.Builder
+		partialStrings := []string{
+			Conf.TgCommandStart, Conf.Language.CommandStartDescription,
+			Conf.Language.CommandShowStory, Conf.Language.CommandShowStoryDescription,
+			Conf.Language.CommandHelp, Conf.Language.CommandHelpDescription,
+		}
+
+		for i := 0; i < len(partialStrings); i++ {
+			helpActions.WriteString(Conf.TgCommandPrefix)
+			helpActions.WriteString(partialStrings[i])
+			i++
+			helpActions.WriteString(Conf.HelpMessageDelimeter)
+			helpActions.WriteString(partialStrings[i])
+			helpActions.WriteString("\n")
+		}
+
+		helpMessage = fmt.Sprintf(Conf.Language.CommandHelpText, helpActions.String())
+	}
+
+	return tgbotapi.NewMessage(update.Message.Chat.ID, helpMessage)
 }
 
-func processCommand(update tgbotapi.Update) tgbotapi.MessageConfig {
+func processCommand(update tgbotapi.Update) []tgbotapi.MessageConfig {
 	msg := update.Message.Text[1:]
 	words := strings.Split(msg, " ")
 
 	if len(words) == 0 {
-		return tgbotapi.NewMessage(update.Message.Chat.ID, Conf.Language.GenericError)
+		return []tgbotapi.MessageConfig{tgbotapi.NewMessage(update.Message.Chat.ID, Conf.Language.GenericError)}
 	}
 
 	switch words[0] {
-	case "start":
+	case Conf.TgCommandStart:
 		return processStart(update)
 	case Conf.Language.CommandShowStory:
-		return processShowStory(update)
+		return []tgbotapi.MessageConfig{processShowStory(update)}
 	case "hi":
-		return tgbotapi.NewMessage(update.Message.Chat.ID, Conf.Language.GenericAlive)
+		return []tgbotapi.MessageConfig{tgbotapi.NewMessage(update.Message.Chat.ID, Conf.Language.GenericAlive)}
 	default:
-		return processHelp(update)
+		return []tgbotapi.MessageConfig{processHelp(update)}
 	}
 
 }
@@ -87,7 +112,7 @@ func processMessage(update tgbotapi.Update) []tgbotapi.MessageConfig {
 	log.Printf("[%s] %s", update.Message.From.UserName, update.Message.Text)
 
 	if strings.HasPrefix(update.Message.Text, "/") {
-		return []tgbotapi.MessageConfig{processCommand(update)}
+		return processCommand(update)
 	} else {
 		return processResponse(update)
 	}

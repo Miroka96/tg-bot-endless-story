@@ -1,3 +1,5 @@
 {
-  "language" : "german"
+  "language" : "german",
+  "storage_backend" : "filesystem",
+  "data_directory" : "data/"
 }
