@@ -2,14 +2,13 @@
 package common
 
 import (
+	"fmt"
 	"github.com/go-telegram-bot-api/telegram-bot-api"
 	"log"
 	"strings"
 )
 
 var token string //= os.Getenv("TBOT_API_KEY")
-
-var story string = ""
 
 func startBot() *tgbotapi.BotAPI {
 	bot, err := tgbotapi.NewBotAPI(token)
@@ -31,30 +30,72 @@ func getUpdates(bot *tgbotapi.BotAPI) tgbotapi.UpdatesChannel {
 	return updates
 }
 
+func processStart(update tgbotapi.Update) tgbotapi.MessageConfig {
+	var response = Conf.Language.UserWelcome
+	response += "\n\n"
+
+	if GetStory(update) == "" {
+		response += Conf.Language.IntroductionNewStory
+	} else {
+		response += fmt.Sprintf(Conf.Language.IntroductionPreviousStory, story)
+	}
+
+	return tgbotapi.NewMessage(update.Message.Chat.ID, response)
+}
+
+func processShowStory(update tgbotapi.Update) tgbotapi.MessageConfig {
+
+	return tgbotapi.NewMessage(update.Message.Chat.ID, GetStory(update))
+}
+
+func processShowSummary(update tgbotapi.Update) tgbotapi.MessageConfig {
+	return tgbotapi.NewMessage(update.Message.Chat.ID, Conf.Language.NotYetImplemented)
+}
+
+func processHelp(update tgbotapi.Update) tgbotapi.MessageConfig {
+	return tgbotapi.NewMessage(update.Message.Chat.ID, Conf.Language.NotYetImplemented)
+}
+
 func processCommand(update tgbotapi.Update) tgbotapi.MessageConfig {
 	msg := update.Message.Text[1:]
 	words := strings.Split(msg, " ")
 
 	if len(words) == 0 {
-		return tgbotapi.NewMessage(update.Message.Chat.ID, story)
+		return tgbotapi.NewMessage(update.Message.Chat.ID, Conf.Language.GenericError)
 	}
 
-	return tgbotapi.NewMessage(update.Message.Chat.ID, "got it")
+	switch words[0] {
+	case "start":
+		return processStart(update)
+	case Conf.Language.CommandShowStory:
+		return processShowStory(update)
+	case Conf.Language.CommandShowSummary:
+		return processShowSummary(update)
+	case "hi":
+		return tgbotapi.NewMessage(update.Message.Chat.ID, Conf.Language.GenericAlive)
+	default:
+		return processHelp(update)
+	}
+
 }
 
-func processResponse(update tgbotapi.Update) tgbotapi.MessageConfig {
-	story += " " + update.Message.Text
+func processResponse(update tgbotapi.Update) []tgbotapi.MessageConfig {
+	var responses []tgbotapi.MessageConfig
+	if UserInTurn(update.Message.Chat.ID) {
+		responses = AppendStory(update, update.Message.Text)
+		responses = append(responses, tgbotapi.NewMessage(update.Message.Chat.ID, Conf.Language.NextUsersTurn))
+	} else {
+		responses = []tgbotapi.MessageConfig{tgbotapi.NewMessage(update.Message.Chat.ID, Conf.Language.NotYourTurn)}
+	}
 
-	msg := tgbotapi.NewMessage(update.Message.Chat.ID, story)
-
-	return msg
+	return responses
 }
 
-func processMessage(update tgbotapi.Update) tgbotapi.MessageConfig {
+func processMessage(update tgbotapi.Update) []tgbotapi.MessageConfig {
 	log.Printf("[%s] %s", update.Message.From.UserName, update.Message.Text)
 
 	if strings.HasPrefix(update.Message.Text, "/") {
-		return processCommand(update)
+		return []tgbotapi.MessageConfig{processCommand(update)}
 	} else {
 		return processResponse(update)
 	}
@@ -71,8 +112,10 @@ func Run() {
 			continue
 		}
 
-		response := processMessage(update)
+		responses := processMessage(update)
 
-		bot.Send(response)
+		for _, response := range responses {
+			bot.Send(response)
+		}
 	}
 }

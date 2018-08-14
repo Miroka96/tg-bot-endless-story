@@ -1,4 +1,16 @@
 {
   "not_understood" : "Was meintest du?",
-  "CLI_welcome" : "Willkommen in der Geschichte!"
+  "CLI_welcome" : "Willkommen in der Geschichte!",
+  "generic_error" : "Das sollte nicht passieren...",
+  "generic_alive" : "Hier bin ich :)",
+  "user_welcome" : "Es war einmal eine Geschichte...",
+  "introduction_previous_story" : "Bisher geht die Erzählung so:\n\n%s\n\nNun darfst du sie weiterschreiben! Erzähl sie mir einfach.",
+  "introduction_new_story" : "Am Anfang stand die Fantasie, DEINE Fantasie! Du kannst mir nun antworten und eine neue Welt erschaffen.",
+  "command_show_story" : "vergangenheit",
+  "command_show_story_description" : "Zeigt dir die Vergangenheit in ihrer gesamten Länge.",
+  "command_show_summary" : "zusammenfassung",
+  "command_show_summary_description" : "Zeigt dir die jüngste Vergangenheit.",
+  "next_users_turn" : "...und der Schriftsteller zieht weiter.",
+  "not_your_turn" : "Der Schriftsteller ist noch nicht wieder da. Er sucht noch andere Erzähler.",
+  "not_yet_implemented" : "Warte noch, Rom wurde auch nicht an einem Tag erbaut."
 }
