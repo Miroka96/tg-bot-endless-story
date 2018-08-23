@@ -3,7 +3,7 @@ TAG = 1.0
 IMAGE = $(NAME):$(TAG)
 VOLUME = endless-story-data
 
-.PHONY: build-container test-container deploy-container clean
+.PHONY: build-container test-container deploy-container clean install-dependencies configure
 
 build-container:
 	docker build -t $(IMAGE) .
@@ -17,3 +17,10 @@ deploy-container:
 clean:
 	docker volume rm $(VOLUME)
 	docker rm $(NAME)
+
+install-dependencies:
+    go get -u github.com/go-sql-driver/mysql
+    go get github.com/go-telegram-bot-api/telegram-bot-api
+
+configure:
+    sh configure.sh
