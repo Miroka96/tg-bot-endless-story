@@ -19,8 +19,8 @@ clean:
 	docker rm $(NAME)
 
 install-dependencies:
-    go get -u github.com/go-sql-driver/mysql
-    go get github.com/go-telegram-bot-api/telegram-bot-api
+	go get -u github.com/go-sql-driver/mysql
+	go get github.com/go-telegram-bot-api/telegram-bot-api
 
 configure:
-    sh configure.sh
+	sh configure.sh
