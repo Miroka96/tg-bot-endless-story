@@ -1,7 +1,7 @@
-package common
+package bot
 
 import (
-	. "./config"
+	. "./common"
 	. "./logging"
 	"github.com/go-telegram-bot-api/telegram-bot-api"
 )
@@ -39,10 +39,10 @@ func Run() {
 			continue
 		}
 
-		responses := processMessage(update)
+		responses := processMessage(MessageUpdate(update))
 
 		for _, response := range responses {
-			bot.Send(response)
+			bot.Send(tgbotapi.MessageConfig(response))
 		}
 	}
 }

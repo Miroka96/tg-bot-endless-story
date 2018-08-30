@@ -1,14 +1,12 @@
 package commands
 
 import (
-	. "../../common"
-	. "../config"
+	. "../common"
 	. "../storage"
 	"fmt"
-	"github.com/go-telegram-bot-api/telegram-bot-api"
 )
 
-func ProcessStart(update tgbotapi.Update) []tgbotapi.MessageConfig {
+func ProcessStart(update MessageUpdate) Messages {
 	var welcomeResponse = Conf.Language.UserWelcome
 	welcomeResponse += "\n\n"
 	story := GetStory(update)
@@ -19,8 +17,5 @@ func ProcessStart(update tgbotapi.Update) []tgbotapi.MessageConfig {
 		welcomeResponse += fmt.Sprintf(Conf.Language.IntroductionPreviousStory, story)
 	}
 
-	return []tgbotapi.MessageConfig{
-		tgbotapi.NewMessage(update.Message.Chat.ID, welcomeResponse),
-		ProcessHelp(update),
-	}
+	return append(ProcessHelp(update), NewMessage(update, welcomeResponse))
 }

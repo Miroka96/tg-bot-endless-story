@@ -1,16 +1,14 @@
 package commands
 
 import (
-	. "../../common"
-	. "../config"
+	. "../common"
 	"fmt"
-	"github.com/go-telegram-bot-api/telegram-bot-api"
 	"strings"
 )
 
 var helpMessage = ""
 
-func ProcessHelp(update tgbotapi.Update) tgbotapi.MessageConfig {
+func ProcessHelp(update MessageUpdate) Messages {
 	if helpMessage == "" {
 		var helpActions strings.Builder
 		partialStrings := []string{
@@ -31,5 +29,5 @@ func ProcessHelp(update tgbotapi.Update) tgbotapi.MessageConfig {
 		helpMessage = fmt.Sprintf(Conf.Language.CommandHelpText, helpActions.String())
 	}
 
-	return tgbotapi.NewMessage(update.Message.Chat.ID, helpMessage)
+	return NewMessages(update, helpMessage)
 }

@@ -1,4 +1,4 @@
-package config
+package common
 
 import (
 	. "../logging"
@@ -8,7 +8,7 @@ import (
 	"os"
 )
 
-const configFilePath = "conf/config.json"
+const configFilePath = "conf/common.json"
 const apikeyFilePath = "conf/api-key"
 const languageFilePattern = "conf/language.%s.json"
 

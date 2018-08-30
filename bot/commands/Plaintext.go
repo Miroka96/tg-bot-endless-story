@@ -1,14 +1,12 @@
 package commands
 
 import (
-	. "../../common"
-	. "../config"
+	. "../common"
 	. "../storage"
-	"github.com/go-telegram-bot-api/telegram-bot-api"
 	"strings"
 )
 
-func checkMessage(update tgbotapi.Update) []tgbotapi.MessageConfig {
+func checkMessage(update MessageUpdate) Messages {
 	var resp string = ""
 
 	msg := update.Message.Text
@@ -26,13 +24,13 @@ func checkMessage(update tgbotapi.Update) []tgbotapi.MessageConfig {
 	if resp == "" {
 		return nil
 	} else {
-		return []tgbotapi.MessageConfig{tgbotapi.NewMessage(update.Message.Chat.ID, resp)}
+		return NewMessages(update, resp)
 	}
 
 }
 
-func ProcessPlaintext(update tgbotapi.Update) []tgbotapi.MessageConfig {
-	var responses []tgbotapi.MessageConfig
+func ProcessPlaintext(update MessageUpdate) Messages {
+	var responses Messages
 
 	responses = checkMessage(update)
 	if responses != nil {
@@ -42,7 +40,7 @@ func ProcessPlaintext(update tgbotapi.Update) []tgbotapi.MessageConfig {
 	if UserInTurn(update.Message.Chat.ID) {
 		responses = AppendStory(update, update.Message.Text)
 	} else {
-		responses = []tgbotapi.MessageConfig{tgbotapi.NewMessage(update.Message.Chat.ID, Conf.Language.NotYourTurn)}
+		responses = NewMessages(update, Conf.Language.NotYourTurn)
 	}
 
 	return responses

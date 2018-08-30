@@ -1,9 +1,8 @@
 package storage
 
 import (
-	. "../config"
+	. "../common"
 	. "../logging"
-	"github.com/go-telegram-bot-api/telegram-bot-api"
 	"io/ioutil"
 	"os"
 	"strings"
@@ -15,11 +14,11 @@ var lastContributor int64
 
 var storyFile *os.File
 
-func getStoryMemory(update tgbotapi.Update) string {
+func getStoryMemory(update MessageUpdate) string {
 	return story
 }
 
-func GetStory(update tgbotapi.Update) string {
+func GetStory(update MessageUpdate) string {
 	switch Conf.StorageBackend {
 	case Conf.StorageBackendMemory:
 		return getStoryMemory(update)
@@ -31,7 +30,7 @@ func GetStory(update tgbotapi.Update) string {
 	return Conf.Language.GenericError
 }
 
-func cleanMessage(update tgbotapi.Update, message string) (string, string) {
+func cleanMessage(update MessageUpdate, message string) (string, string) {
 	message = strings.TrimSpace(message)
 	storedMessage := message
 	if GetStory(update) != "" {
@@ -40,18 +39,18 @@ func cleanMessage(update tgbotapi.Update, message string) (string, string) {
 	return storedMessage, message
 }
 
-func distributeStory(message string) []tgbotapi.MessageConfig {
-	distributions := make([]tgbotapi.MessageConfig, 0, len(contributors))
+func distributeStory(message string) Messages {
+	distributions := make(Messages, len(contributors))
 	for contributor := range contributors {
 		if contributor == lastContributor {
 			continue
 		}
-		distributions = append(distributions, tgbotapi.NewMessage(contributor, message))
+		distributions = append(distributions, NewMessageFromId(contributor, message))
 	}
 	return distributions
 }
 
-func AddUserToStory(update tgbotapi.Update) bool {
+func AddUserToStory(update MessageUpdate) bool {
 	_, present := contributors[update.Message.Chat.ID]
 	if !present {
 		contributors[update.Message.Chat.ID] = update.Message.From.UserName
@@ -68,7 +67,7 @@ func appendStoryLocal(message string) {
 	Check(err)
 }
 
-func AppendStory(update tgbotapi.Update, message string) []tgbotapi.MessageConfig {
+func AppendStory(update MessageUpdate, message string) Messages {
 	storedMessage, message := cleanMessage(update, message)
 
 	appendStoryMemory(storedMessage)
