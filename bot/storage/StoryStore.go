@@ -2,122 +2,109 @@ package storage
 
 import (
 	. "../common"
-	. "../logging"
-	"io/ioutil"
-	"os"
+	"./local"
+	"./memory"
 	"strings"
 )
 
-var story string
-var contributors map[int64]string
-var lastContributor int64
+type Empty struct{}
 
-var storyFile *os.File
+var Nil = Empty{}
 
-func getStoryMemory(update MessageUpdate) string {
-	return story
+type Store interface {
+	GetStory() string
+	AppendStory(string)
+	AddChat(int64) bool
+	GetChats() map[int64]Empty
+	AddUser(string) bool
+	GetUsers() map[string]Empty
+	GetLastChat() int64
+	SetLastChat(int64)
 }
 
-func GetStory(update MessageUpdate) string {
-	switch Conf.StorageBackend {
-	case Conf.StorageBackendMemory:
-		return getStoryMemory(update)
-	case Conf.StorageBackendLocal:
-		return getStoryMemory(update)
-	default:
-		Fatal(Conf.ErrorStorageBackendUnknown)
-	}
-	return Conf.Language.GenericError
+var stores = map[string]Store{
+	Conf.StorageBackendMemory: memory.NewMemoryData(),
+	Conf.StorageBackendLocal:  local.NewLocalData(),
 }
 
-func cleanMessage(update MessageUpdate, message string) (string, string) {
+var readingStore Store
+var writingStores []Store
+
+func GetStory() string {
+	return readingStore.GetStory()
+}
+
+func cleanMessage(message string) (string, string) {
 	message = strings.TrimSpace(message)
 	storedMessage := message
-	if GetStory(update) != "" {
+	if readingStore.GetStory() != "" {
 		storedMessage = " " + message
 	}
 	return storedMessage, message
 }
 
-func distributeStory(message string) Messages {
-	distributions := make(Messages, len(contributors))
-	for contributor := range contributors {
-		if contributor == lastContributor {
+func distributeText(messageText string) Messages {
+	chats := readingStore.GetChats()
+	lastChat := readingStore.GetLastChat()
+
+	messages := make(Messages, len(chats))
+	for chatId := range chats {
+		if chatId == lastChat {
 			continue
 		}
-		distributions = append(distributions, NewMessageFromId(contributor, message))
+		messages = append(messages, NewMessageFromId(chatId, messageText))
 	}
-	return distributions
+	return messages
 }
 
-func AddUserToStory(update MessageUpdate) bool {
-	_, present := contributors[update.Message.Chat.ID]
-	if !present {
-		contributors[update.Message.Chat.ID] = update.Message.From.UserName
-	}
-	return !present
-}
-
-func appendStoryMemory(message string) {
-	story += message
-}
-
-func appendStoryLocal(message string) {
-	_, err := storyFile.WriteString(message)
-	Check(err)
+func updateStatus(store Store, update MessageUpdate) {
+	store.AddChat(update.Message.Chat.ID)
+	store.AddUser(update.Message.From.UserName)
+	store.SetLastChat(update.Message.Chat.ID)
 }
 
 func AppendStory(update MessageUpdate, message string) Messages {
-	storedMessage, message := cleanMessage(update, message)
+	storedMessage, message := cleanMessage(message)
 
-	appendStoryMemory(storedMessage)
-	switch Conf.StorageBackend {
-	case Conf.StorageBackendMemory:
-	case Conf.StorageBackendLocal:
-		appendStoryLocal(storedMessage)
-	default:
-		Fatal(Conf.ErrorStorageBackendUnknown)
+	readingStore.AppendStory(storedMessage)
+	updateStatus(readingStore, update)
+
+	for _, store := range writingStores {
+		store.AppendStory(storedMessage)
+		updateStatus(store, update)
 	}
 
-	lastContributor = update.Message.Chat.ID
-
-	AddUserToStory(update)
-
-	return distributeStory(message)
+	return distributeText(message)
 }
 
-func UserInTurn(userId int64) bool {
-	return userId != lastContributor
+func IsUserInTurn(chatId int64) bool {
+	return chatId != readingStore.GetLastChat()
 }
 
-func initializeMemoryStorage() {
-	story = ""
-	lastContributor = 0
-	contributors = make(map[int64]string)
-}
-
-func initializeLocalStorage() {
-	os.MkdirAll(Conf.DataDirectory, os.ModePerm)
-	storyFilepath := Conf.DataDirectory + Conf.StorageBackendLocalStoryFile
-
-	f, err := os.OpenFile(storyFilepath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
-	Check(err)
-
-	dat, err := ioutil.ReadFile(storyFilepath)
-	Check(err)
-	story = string(dat)
-
-	storyFile = f
+func copyData(from Store, to Store) Store {
+	to.AppendStory(from.GetStory())
+	to.SetLastChat(from.GetLastChat())
+	for chatId := range from.GetChats() {
+		to.AddChat(chatId)
+	}
+	for username := range from.GetUsers() {
+		to.AddUser(username)
+	}
+	return to
 }
 
 func InitializeStorage() {
-	initializeMemoryStorage()
+	readingStore = stores[Conf.StorageBackendMemory]
 
-	switch Conf.StorageBackend {
-	case Conf.StorageBackendMemory:
-	case Conf.StorageBackendLocal:
-		initializeLocalStorage()
-	default:
-		Fatal(Conf.ErrorStorageBackendUnknown)
+	if Conf.StorageBackend != Conf.StorageBackendMemory {
+		store, present := stores[Conf.StorageBackend]
+		if !present {
+			Fatal(Conf.ErrorStorageBackendUnknown)
+		}
+		writingStores = append(writingStores, store)
+	}
+
+	if len(writingStores) > 0 {
+		copyData(writingStores[0], readingStore)
 	}
 }

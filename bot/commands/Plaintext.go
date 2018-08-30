@@ -7,7 +7,7 @@ import (
 )
 
 func checkMessage(update MessageUpdate) Messages {
-	var resp string = ""
+	var resp = ""
 
 	msg := update.Message.Text
 	spaces := strings.Count(msg, " ")
@@ -37,7 +37,7 @@ func ProcessPlaintext(update MessageUpdate) Messages {
 		return responses
 	}
 
-	if UserInTurn(update.Message.Chat.ID) {
+	if IsUserInTurn(update.Message.Chat.ID) {
 		responses = AppendStory(update, update.Message.Text)
 	} else {
 		responses = NewMessages(update, Conf.Language.NotYourTurn)

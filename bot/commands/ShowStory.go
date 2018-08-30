@@ -6,5 +6,5 @@ import (
 )
 
 func ProcessShowStory(update MessageUpdate) Messages {
-	return NewMessages(update, GetStory(update))
+	return NewMessages(update, GetStory())
 }

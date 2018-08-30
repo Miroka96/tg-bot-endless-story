@@ -3,7 +3,6 @@ package bot
 import (
 	. "./commands"
 	. "./common"
-	"log"
 	"strings"
 )
 
@@ -29,7 +28,7 @@ func processCommand(update MessageUpdate) Messages {
 }
 
 func processMessage(update MessageUpdate) Messages {
-	log.Printf("[%s] %s", update.Message.From.UserName, update.Message.Text)
+	LogUpdate(update)
 
 	if strings.HasPrefix(update.Message.Text, "/") {
 		return processCommand(update)

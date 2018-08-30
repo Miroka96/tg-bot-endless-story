@@ -2,7 +2,6 @@ package bot
 
 import (
 	. "./common"
-	. "./logging"
 	"github.com/go-telegram-bot-api/telegram-bot-api"
 )
 

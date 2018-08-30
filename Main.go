@@ -1,15 +1,17 @@
 package main
 
 import (
+	. "./bot"
+	. "./bot/common"
+	"./bot/storage"
 	"io"
 	"log"
 	"os"
-	"tg-bot-endless-story/common"
 )
 
 func logIntoFile() {
-	logfile, err := os.OpenFile(common.Conf.DataDirectory+common.Conf.LogFile, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
-	common.Check(err)
+	logfile, err := os.OpenFile(Conf.DataDirectory+Conf.LogFile, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	Check(err)
 
 	mw := io.MultiWriter(os.Stderr, logfile)
 	log.SetOutput(mw)
@@ -18,11 +20,11 @@ func logIntoFile() {
 func main() {
 	println("Opening the Book...")
 
-	common.ReadConfig()
-	common.InitializeStorage()
+	ReadConfig()
+	storage.InitializeStorage()
 	logIntoFile()
 
-	println(common.Conf.Language.CliWelcome)
+	println(Conf.Language.CliWelcome)
 
-	common.Run()
+	Run()
 }

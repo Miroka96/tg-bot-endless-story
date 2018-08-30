@@ -1,4 +1,4 @@
-package logging
+package common
 
 import "log"
 

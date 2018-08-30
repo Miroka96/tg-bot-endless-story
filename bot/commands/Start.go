@@ -9,7 +9,7 @@ import (
 func ProcessStart(update MessageUpdate) Messages {
 	var welcomeResponse = Conf.Language.UserWelcome
 	welcomeResponse += "\n\n"
-	story := GetStory(update)
+	story := GetStory()
 
 	if story == "" {
 		welcomeResponse += Conf.Language.IntroductionNewStory
