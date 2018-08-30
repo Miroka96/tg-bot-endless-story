@@ -1,6 +1,7 @@
-package common
+package config
 
 import (
+	. "../logging"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -30,6 +31,11 @@ type Language struct {
 	NextUsersTurn               string `json:"next_users_turn"`
 	NotYourTurn                 string `json:"not_your_turn"`
 	NotYetImplemented           string `json:"not_yet_implemented"`
+	MessageTooShort             string `json:"message_too_short"`
+	MessageTooLong              string `json:"message_too_long"`
+	MessageMissingSpaces        string `json:"message_missing_spaces"`
+	NotPermitted                string `json:"not_permitted"`
+	FullStoryText               string `json:"full_story"`
 }
 
 type Configuration struct {
@@ -42,6 +48,14 @@ type Configuration struct {
 	StorageBackendMemory         string
 	StorageBackendLocal          string
 	StorageBackendLocalStoryFile string
+	FullStorySource              string `json:"full_story_source"`
+
+	MessageMinLength int `json:"message_length_minimum"`
+	MessageMaxLength int `json:"message_length_maximum"`
+	MessageMinSpaces int `json:"message_spaces_minimum"`
+
+	TgMessageMaxLength  int `json:"message_spaces_minimum"`
+	TgMessagesPerSecond int `json:"telegram_messages_per_second_limit"`
 
 	TgCommandStart       string
 	TgCommandPrefix      string

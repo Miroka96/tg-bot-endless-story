@@ -1,6 +1,8 @@
-package common
+package storage
 
 import (
+	. "../config"
+	. "../logging"
 	"github.com/go-telegram-bot-api/telegram-bot-api"
 	"io/ioutil"
 	"os"
@@ -91,6 +93,8 @@ func UserInTurn(userId int64) bool {
 
 func initializeMemoryStorage() {
 	story = ""
+	lastContributor = 0
+	contributors = make(map[int64]string)
 }
 
 func initializeLocalStorage() {
@@ -108,12 +112,10 @@ func initializeLocalStorage() {
 }
 
 func InitializeStorage() {
-	lastContributor = 0
-	contributors = make(map[int64]string)
+	initializeMemoryStorage()
 
 	switch Conf.StorageBackend {
 	case Conf.StorageBackendMemory:
-		initializeMemoryStorage()
 	case Conf.StorageBackendLocal:
 		initializeLocalStorage()
 	default:
