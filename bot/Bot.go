@@ -5,9 +5,7 @@ import (
 	"github.com/go-telegram-bot-api/telegram-bot-api"
 )
 
-var token string
-
-func startBot() *tgbotapi.BotAPI {
+func startBot(token string) *tgbotapi.BotAPI {
 	bot, err := tgbotapi.NewBotAPI(token)
 	Check(err)
 
@@ -28,9 +26,7 @@ func getUpdates(bot *tgbotapi.BotAPI) tgbotapi.UpdatesChannel {
 }
 
 func Run() {
-	token = Conf.ApiKey
-
-	bot := startBot()
+	bot := startBot(Conf.ApiKey)
 	updates := getUpdates(bot)
 
 	for update := range updates {

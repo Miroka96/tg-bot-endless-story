@@ -1,7 +1,7 @@
-package memory
+package backends
 
 import (
-	. ".."
+	. "../common"
 )
 
 type MemoryData struct {

@@ -17,5 +17,5 @@ func ProcessStart(update MessageUpdate) Messages {
 		welcomeResponse += fmt.Sprintf(Conf.Language.IntroductionPreviousStory, story)
 	}
 
-	return append(ProcessHelp(update), NewMessage(update, welcomeResponse))
+	return append(NewMessages(update, welcomeResponse), ProcessHelp(update)...)
 }

@@ -10,7 +10,7 @@ function storeApiKey {
 	echo -n "Please enter the Telegram API key for Target '${target}': "
 	read key
 	targetfile=${configdir}${apikeyprefix}${target}${apikeysuffix}
-	echo $key > ${targetfile}
+	echo -n $key > ${targetfile}
 	echo "Wrote api key to ${targetfile}"
 	echo
 }

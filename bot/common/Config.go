@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"strings"
 )
 
 const configDirectory = "conf" + string(os.PathSeparator)
@@ -34,6 +35,7 @@ type Language struct {
 	MessageMissingSpaces        string `json:"message_missing_spaces"`
 	NotPermitted                string `json:"not_permitted"`
 	FullStoryText               string `json:"full_story"`
+	NoStoryYet                  string `json:"no_story_yet"`
 }
 
 type Configuration struct {
@@ -100,14 +102,15 @@ func readConfigFile() {
 }
 
 func readApiKey() {
-	apikeyFilePath := fmt.Sprintf(Conf.ApiKeyFilePattern, Conf.Target)
+	apikeyFilePath := configDirectory + fmt.Sprintf(Conf.ApiKeyFilePattern, Conf.Target)
 	dat, err := ioutil.ReadFile(apikeyFilePath)
 	Check(err)
-	Conf.ApiKey = string(dat)
+	apikey := string(dat)
+	Conf.ApiKey = strings.TrimSpace(apikey)
 }
 
 func readLanguageFile(lang string) {
-	filepath := fmt.Sprintf(Conf.LanguageFilePattern, lang)
+	filepath := configDirectory + fmt.Sprintf(Conf.LanguageFilePattern, lang)
 
 	file, err := os.Open(filepath)
 	Check(err)

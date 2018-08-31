@@ -2,31 +2,13 @@ package storage
 
 import (
 	. "../common"
-	"./local"
-	"./memory"
+	"./backends"
+	. "./common"
 	"fmt"
 	"strings"
 )
 
-type Empty struct{}
-
-var Nil = Empty{}
-
-type Store interface {
-	GetStory() string
-	AppendStory(string)
-	AddChat(int64) bool
-	GetChats() map[int64]Empty
-	AddUser(string) bool
-	GetUsers() map[string]Empty
-	GetLastChat() int64
-	SetLastChat(int64)
-}
-
-var stores = map[string]Store{
-	Conf.StorageBackendMemory: memory.NewMemoryData(),
-	Conf.StorageBackendLocal:  local.NewLocalData(),
-}
+var stores map[string]Store
 
 var readingStore Store
 var writingStores []Store
@@ -139,7 +121,15 @@ func copyData(from Store, to Store) Store {
 	return to
 }
 
+func initializeStores() {
+	stores = map[string]Store{
+		Conf.StorageBackendMemory: backends.NewMemoryData(),
+		Conf.StorageBackendLocal:  backends.NewLocalData(),
+	}
+}
+
 func InitializeStorage() {
+	initializeStores()
 	readingStore = stores[Conf.StorageBackendMemory]
 
 	if Conf.StorageBackend != Conf.StorageBackendMemory {
