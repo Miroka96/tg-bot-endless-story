@@ -6,5 +6,10 @@ import (
 )
 
 func ProcessShowStory(update MessageUpdate) Messages {
-	return NewMessages(update, GetStory())
+	story := GetShortStory()
+	if story == "" {
+		story = Conf.Language.NoStoryYet
+	}
+
+	return NewMessages(update, story)
 }

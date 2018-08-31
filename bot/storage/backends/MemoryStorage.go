@@ -11,8 +11,8 @@ type MemoryData struct {
 	lastContributingChat int64
 }
 
-func NewMemoryData() MemoryData {
-	return MemoryData{
+func NewMemoryData() *MemoryData {
+	return &MemoryData{
 		story:                "",
 		chatIds:              make(map[int64]Empty),
 		contributors:         make(map[string]Empty),
@@ -20,15 +20,15 @@ func NewMemoryData() MemoryData {
 	}
 }
 
-func (data MemoryData) GetStory() string {
+func (data *MemoryData) GetStory() string {
 	return data.story
 }
 
-func (data MemoryData) AppendStory(message string) {
+func (data *MemoryData) AppendStory(message string) {
 	data.story += message
 }
 
-func (data MemoryData) AddChat(chatId int64) bool {
+func (data *MemoryData) AddChat(chatId int64) bool {
 	_, present := data.chatIds[chatId]
 	if !present {
 		data.chatIds[chatId] = Nil
@@ -36,7 +36,7 @@ func (data MemoryData) AddChat(chatId int64) bool {
 	return !present
 }
 
-func (data MemoryData) AddUser(username string) bool {
+func (data *MemoryData) AddUser(username string) bool {
 	_, present := data.contributors[username]
 	if !present {
 		data.contributors[username] = Nil
@@ -44,18 +44,18 @@ func (data MemoryData) AddUser(username string) bool {
 	return !present
 }
 
-func (data MemoryData) GetChats() map[int64]Empty {
+func (data *MemoryData) GetChats() map[int64]Empty {
 	return data.chatIds
 }
 
-func (data MemoryData) GetUsers() map[string]Empty {
+func (data *MemoryData) GetUsers() map[string]Empty {
 	return data.contributors
 }
 
-func (data MemoryData) GetLastChat() int64 {
+func (data *MemoryData) GetLastChat() int64 {
 	return data.lastContributingChat
 }
 
-func (data MemoryData) SetLastChat(chatId int64) {
+func (data *MemoryData) SetLastChat(chatId int64) {
 	data.lastContributingChat = chatId
 }

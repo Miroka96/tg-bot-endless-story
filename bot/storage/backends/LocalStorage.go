@@ -12,7 +12,7 @@ type LocalData struct {
 	storyFile     *os.File
 }
 
-func NewLocalData() LocalData {
+func NewLocalData() *LocalData {
 	os.MkdirAll(Conf.DataDirectory, os.ModePerm)
 	storyFilePath := Conf.DataDirectory + Conf.StorageBackendLocalStoryFile
 
@@ -23,40 +23,40 @@ func NewLocalData() LocalData {
 		storyFilePath: storyFilePath,
 		storyFile:     storyFile,
 	}
-	return data
+	return &data
 }
 
-func (data LocalData) GetStory() string {
+func (data *LocalData) GetStory() string {
 	dat, err := ioutil.ReadFile(data.storyFilePath)
 	Check(err)
 	return string(dat)
 }
 
-func (data LocalData) AppendStory(message string) {
+func (data *LocalData) AppendStory(message string) {
 	_, err := data.storyFile.WriteString(message)
 	Check(err)
 }
 
-func (data LocalData) AddChat(chatId int64) bool {
+func (data *LocalData) AddChat(chatId int64) bool {
 	return false
 }
 
-func (data LocalData) AddUser(username string) bool {
+func (data *LocalData) AddUser(username string) bool {
 	return false
 }
 
-func (data LocalData) GetChats() map[int64]Empty {
+func (data *LocalData) GetChats() map[int64]Empty {
 	return nil
 }
 
-func (data LocalData) GetUsers() map[string]Empty {
+func (data *LocalData) GetUsers() map[string]Empty {
 	return nil
 }
 
-func (data LocalData) GetLastChat() int64 {
+func (data *LocalData) GetLastChat() int64 {
 	return 0
 }
 
-func (data LocalData) SetLastChat(chatId int64) {
+func (data *LocalData) SetLastChat(chatId int64) {
 
 }
