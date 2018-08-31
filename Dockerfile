@@ -7,7 +7,7 @@ RUN mkdir /go/src/tg-bot-endless-story
 ADD . /go/src/tg-bot-endless-story/
 WORKDIR /go/src/tg-bot-endless-story
 
-RUN go build -o main .
+RUN go build -o main Main.go
 
 VOLUME /go/src/tg-bot-endless-story/data
 
