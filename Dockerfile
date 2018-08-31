@@ -1,11 +1,11 @@
 FROM golang:latest
 
+RUN go get github.com/go-telegram-bot-api/telegram-bot-api
+
 RUN mkdir /go/src/tg-bot-endless-story
 
 ADD . /go/src/tg-bot-endless-story/
 WORKDIR /go/src/tg-bot-endless-story
-
-RUN go get github.com/go-telegram-bot-api/telegram-bot-api
 
 RUN go build -o main .
 
