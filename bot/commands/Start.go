@@ -3,19 +3,20 @@ package commands
 import (
 	. "../common"
 	. "../storage"
-	"fmt"
 )
 
 func ProcessStart(update MessageUpdate) Messages {
-	var welcomeResponse = Conf.Language.UserWelcome
-	welcomeResponse += "\n\n"
+	welcomeMessage := Conf.Language.StartPrefixUserWelcome
 	story := GetStory()
 
+	var response string
+
 	if story == "" {
-		welcomeResponse += Conf.Language.IntroductionNewStory
+		response = welcomeMessage + Conf.Language.StartSuffixIntroductionNewStory
 	} else {
-		welcomeResponse += fmt.Sprintf(Conf.Language.IntroductionPreviousStory, story)
+		welcomeMessage += Conf.Language.StartSuffixIntroductionPreviousStory
+		response = GetShortStory(welcomeMessage, true)
 	}
 
-	return append(NewMessages(update, welcomeResponse), ProcessHelp(update)...)
+	return append(NewMessages(update, response), ProcessHelp(update)...)
 }

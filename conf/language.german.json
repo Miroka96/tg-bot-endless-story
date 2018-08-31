@@ -3,9 +3,9 @@
   "CLI_welcome" : "Willkommen in der Geschichte!",
   "generic_error" : "Das sollte nicht passieren...",
   "generic_alive" : "Hier bin ich :)",
-  "user_welcome" : "Es war einmal eine Geschichte...\n\nIch bin ein Schriftsteller und ziehe durchs Land. Dabei notiere ich mir alle Geschichten, die mir unterwegs erzählt werden. Ich möchte allerdings eine bunte Erzählung, weshalb sich die Leute beim Erzählen abwechseln müssen.",
-  "introduction_previous_story" : "Bisher geht die Erzählung so:\n%s\n\nNun darfst du sie weiterdichten! Erzähl mir einfach die Fortsetzung :)",
-  "introduction_new_story" : "Am Anfang meiner Geschichten steht die Fantasie, DEINE Fantasie! Du kannst mir nun antworten und eine neue Welt erschaffen.",
+  "command_start_text_prefix_user_welcome" : "Es war einmal eine Geschichte...\nIch bin ein Schriftsteller und ziehe durchs Land. Dabei notiere ich mir alle Geschichten, die mir unterwegs erzählt werden. Ich möchte allerdings eine bunte Erzählung, weshalb sich die Leute beim Erzählen abwechseln müssen.\n\n",
+  "command_start_text_previous_story" : "Bisher geht die Erzählung so:\n%s\n\nNun darfst du sie weiterdichten! Erzähl mir einfach die Fortsetzung :)",
+  "command_start_text_new_story" : "Am Anfang meiner Geschichten steht die Fantasie, DEINE Fantasie! Du kannst mir nun antworten und eine neue Welt erschaffen.",
   "command_show_story" : "geschichte",
   "command_show_story_description" : "Zeigt dir die Vergangenheit.",
   "command_start_description" : "Du siehst die anfängliche Begrüßung nochmal.",
@@ -19,6 +19,6 @@
   "message_too_long" : "So lange Sätze kann ich mir beim besten Willen nicht merken...",
   "message_missing_spaces" : "Mehr Wörter wären nett...",
   "not_permitted" : "Das lässt du bitte.",
-  "full_story" : "...%s\n\nDie Post ist mir zu teuer geworden, deshalb findest du die komplette Geschichte unter:\n%s",
+  "full_story" : "... %s\n\nDie Post ist mir zu teuer geworden, deshalb findest du die komplette Geschichte unter:\n%s",
   "no_story_yet" : "Es gibt noch keine Geschichte... Du darfst dir also eine neue Welt ausdenken.\n\nAllem Anfang wohnt ein Zauber inne."
 }

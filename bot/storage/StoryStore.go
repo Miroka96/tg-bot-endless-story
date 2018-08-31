@@ -17,21 +17,14 @@ func GetStory() string {
 	return readingStore.GetStory()
 }
 
-func GetShortStory() string {
+func GetShortStory(wrappingPattern string, forceWrapping bool) string {
 	story := GetStory()
-	if len([]rune(story)) <= Conf.MessageMaxLength {
+	if !forceWrapping && len([]rune(story)) <= Conf.TgMessageMaxLength {
 		return story
 	}
 
 	shortStory := ""
-	maxLength := Conf.MessageMaxLength -
-		len(
-			[]rune(
-				fmt.Sprintf(
-					Conf.Language.FullStoryText,
-					shortStory,
-					Conf.FullStorySource,
-				)))
+	maxLength := Conf.TgMessageMaxLength - len([]rune(wrappingPattern))
 
 	storyWords := strings.SplitAfter(story, Conf.TextDelimeter)
 
@@ -56,9 +49,7 @@ func GetShortStory() string {
 	}
 	shortStory = strings.TrimSpace(shortStory)
 
-	wrappedStory := fmt.Sprintf(
-		Conf.Language.FullStoryText,
-		shortStory, Conf.FullStorySource)
+	wrappedStory := fmt.Sprintf(wrappingPattern, shortStory)
 	return wrappedStory
 }
 
