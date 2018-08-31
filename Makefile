@@ -2,6 +2,7 @@ NAME = endless-story
 TAG = 1.0
 IMAGE = $(NAME):$(TAG)
 VOLUME = endless-story-data
+MOUNTPATH = /tg-bot-endless-story/data
 
 .PHONY: build-container test-container deploy-container clean install-dependencies configure
 
@@ -9,10 +10,10 @@ build-container:
 	docker build -t $(IMAGE) .
 
 test-container:
-	docker run -v $(VOLUME):/go/src/tg-bot-endless-story/data $(IMAGE)
+	docker run -v $(VOLUME):$(MOUNTPATH) $(IMAGE)
 
 deploy-container:
-	docker run --detach --restart always --name=$(NAME) -v $(VOLUME):/go/src/tg-bot-endless-story/data $(IMAGE)
+	docker run --detach --restart always --name=$(NAME) -v $(VOLUME):$(MOUNTPATH) $(IMAGE)
 
 undeploy-container:
 	-docker stop $(NAME)
