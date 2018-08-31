@@ -59,6 +59,8 @@ type Configuration struct {
 	TgCommandStart       string
 	TgCommandPrefix      string
 	HelpMessageDelimeter string
+	TextDelimeter        string
+	WordSplittingLength  int `json:"word_splitting_length"`
 
 	ErrorStorageBackendUnknown string
 }
@@ -77,6 +79,7 @@ func newConfiguration() *Configuration {
 	conf.TgCommandPrefix = "/"
 
 	conf.HelpMessageDelimeter = " - "
+	conf.TextDelimeter = " "
 
 	conf.ErrorStorageBackendUnknown = "Unknown Storage Backend"
 

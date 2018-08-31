@@ -45,17 +45,17 @@ func (data MemoryData) AddUser(username string) bool {
 }
 
 func (data MemoryData) GetChats() map[int64]Empty {
-	return nil
+	return data.chatIds
 }
 
 func (data MemoryData) GetUsers() map[string]Empty {
-	return nil
+	return data.contributors
 }
 
 func (data MemoryData) GetLastChat() int64 {
-	return 0
+	return data.lastContributingChat
 }
 
 func (data MemoryData) SetLastChat(chatId int64) {
-
+	data.lastContributingChat = chatId
 }

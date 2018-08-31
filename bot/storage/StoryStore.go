@@ -4,6 +4,7 @@ import (
 	. "../common"
 	"./local"
 	"./memory"
+	"fmt"
 	"strings"
 )
 
@@ -32,6 +33,51 @@ var writingStores []Store
 
 func GetStory() string {
 	return readingStore.GetStory()
+}
+
+func GetShortStory() string {
+	story := GetStory()
+	if len([]rune(story)) <= Conf.MessageMaxLength {
+		return story
+	}
+
+	shortStory := ""
+	maxLength := Conf.MessageMaxLength -
+		len(
+			[]rune(
+				fmt.Sprintf(
+					Conf.Language.FullStoryText,
+					shortStory,
+					Conf.FullStorySource,
+				)))
+
+	storyWords := strings.SplitAfter(story, Conf.TextDelimeter)
+
+	length := 0
+
+	for i := len(storyWords) - 1; i >= 0; i-- {
+		wordLength := len([]rune(storyWords[i]))
+		length += wordLength
+		if length >= maxLength {
+			startIndex := i
+			if length > maxLength && wordLength < Conf.WordSplittingLength {
+				startIndex++
+			}
+			shortStory = strings.Join(storyWords[startIndex:], "")
+
+			if length > maxLength && wordLength >= Conf.WordSplittingLength {
+				shortStory = shortStory[-maxLength:]
+			}
+
+			break
+		}
+	}
+	shortStory = strings.TrimSpace(shortStory)
+
+	wrappedStory := fmt.Sprintf(
+		Conf.Language.FullStoryText,
+		shortStory, Conf.FullStorySource)
+	return wrappedStory
 }
 
 func cleanMessage(message string) (string, string) {

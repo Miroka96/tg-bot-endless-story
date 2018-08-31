@@ -7,5 +7,6 @@
   "message_spaces_minimum" : 1,
   "telegram_message_length_limit" : 4096,
   "telegram_messages_per_second_limit" : 30,
-  "full_story_source" : "coming soon"
+  "full_story_source" : "coming soon",
+  "word_splitting_length" : 25
 }

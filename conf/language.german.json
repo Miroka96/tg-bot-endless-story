@@ -7,9 +7,7 @@
   "introduction_previous_story" : "Bisher geht die Erzählung so:\n%s\n\nNun darfst du sie weiterdichten! Erzähl mir einfach die Fortsetzung :)",
   "introduction_new_story" : "Am Anfang meiner Geschichten steht die Fantasie, DEINE Fantasie! Du kannst mir nun antworten und eine neue Welt erschaffen.",
   "command_show_story" : "geschichte",
-  "command_show_full_story" : "komplettegeschichte",
   "command_show_story_description" : "Zeigt dir die Vergangenheit.",
-  "command_show_full_story_description" : "Bringt dir die gesamte Vergangenheit.",
   "command_start_description" : "Du siehst die anfängliche Begrüßung nochmal.",
   "command_help" : "hilfe",
   "command_help_description" : "Du kannst jederzeit diese Hilfe aufrufen.",
@@ -21,5 +19,5 @@
   "message_too_long" : "So lange Sätze kann ich mir beim besten Willen nicht merken...",
   "message_missing_spaces" : "Mehr Wörter wären nett...",
   "not_permitted" : "Das lässt du bitte.",
-  "full_story" : "Die Post ist mir zu teuer geworden, deshalb findest du die komplette Geschichte unter:\n%s"
+  "full_story" : "...%s\n\nDie Post ist mir zu teuer geworden, deshalb findest du die komplette Geschichte unter:\n%s"
 }
