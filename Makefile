@@ -21,6 +21,8 @@ undeploy-container:
 
 redeploy-container: undeploy-container deploy-container
 
+build-redeploy-container: build-container redeploy-container
+
 clean:
 	-docker volume rm $(VOLUME)
 	-docker rm $(NAME)
