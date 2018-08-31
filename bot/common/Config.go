@@ -7,9 +7,8 @@ import (
 	"os"
 )
 
-const configFilePath = "conf/common.json"
-const apikeyFilePath = "conf/api-key"
-const languageFilePattern = "conf/language.%s.json"
+const configDirectory = "conf" + string(os.PathSeparator)
+const configFilePath = configDirectory + "config.json"
 
 var Conf *Configuration
 
@@ -48,6 +47,9 @@ type Configuration struct {
 	StorageBackendLocal          string
 	StorageBackendLocalStoryFile string
 	FullStorySource              string `json:"full_story_source"`
+	LanguageFilePattern          string `json:"language_file_pattern"`
+	ApiKeyFilePattern            string `json:"apikey_file_pattern"`
+	Target                       string `json:"target"`
 
 	MessageMinLength int `json:"message_length_minimum"`
 	MessageMaxLength int `json:"message_length_maximum"`
@@ -98,13 +100,14 @@ func readConfigFile() {
 }
 
 func readApiKey() {
+	apikeyFilePath := fmt.Sprintf(Conf.ApiKeyFilePattern, Conf.Target)
 	dat, err := ioutil.ReadFile(apikeyFilePath)
 	Check(err)
 	Conf.ApiKey = string(dat)
 }
 
 func readLanguageFile(lang string) {
-	filepath := fmt.Sprintf(languageFilePattern, lang)
+	filepath := fmt.Sprintf(Conf.LanguageFilePattern, lang)
 
 	file, err := os.Open(filepath)
 	Check(err)

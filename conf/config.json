@@ -1,5 +1,8 @@
 {
   "language" : "german",
+  "language_file_pattern" : "language.%s.json",
+  "apikey_file_pattern" : "api-key.%s.conf",
+  "target" : "testing",
   "storage_backend" : "filesystem",
   "data_directory" : "data/",
   "message_length_minimum" : 5,

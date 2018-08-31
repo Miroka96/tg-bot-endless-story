@@ -34,6 +34,7 @@ function requestApiKey {
 			echo "Overwriting ${targetfile} ..."
 		else 
 			echo "Continuing..."
+			echo
 			return
 		fi
 	fi
