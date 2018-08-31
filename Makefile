@@ -14,9 +14,15 @@ test-container:
 deploy-container:
 	docker run --detach --restart always --name=$(NAME) -v $(VOLUME):/go/src/tg-bot-endless-story/data $(IMAGE)
 
-clean:
-	docker volume rm $(VOLUME)
+undeploy-container:
+	-docker stop $(NAME)
 	docker rm $(NAME)
+
+redeploy-container: undeploy-container deploy-container
+
+clean:
+	-docker volume rm $(VOLUME)
+	-docker rm $(NAME)
 
 install-dependencies:
 	go get -u github.com/go-sql-driver/mysql
