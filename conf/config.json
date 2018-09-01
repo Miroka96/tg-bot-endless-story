@@ -4,6 +4,10 @@
   "apikey_file_pattern" : "api-key.%s.conf",
   "target" : "testing",
   "storage_backend" : "filesystem",
+  "storage_backend_local_story_file" : "story.txt",
+  "storage_backend_local_chat_file" : "chats.txt",
+  "storage_backend_local_user_file" : "users.txt",
+  "storage_backend_local_lastchat_file" : "lastchat.txt",
   "data_directory" : "data/",
   "message_length_minimum" : 5,
   "message_length_maximum" : 200,
@@ -11,5 +15,8 @@
   "telegram_message_length_maximum" : 4096,
   "telegram_messages_per_second_limit" : 30,
   "full_story_source" : "coming soon",
-  "word_splitting_length" : 25
+  "word_splitting_length" : 25,
+  "log_file" : "log.txt",
+  "help_message_delimeter" : " - ",
+  "word_delimeter" : " "
 }

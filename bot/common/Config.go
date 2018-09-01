@@ -40,19 +40,22 @@ type Language struct {
 }
 
 type Configuration struct {
-	ApiKey                       string
-	LanguageString               string `json:"language"`
-	Language                     *Language
-	DataDirectory                string `json:"data_directory"`
-	LogFile                      string
-	StorageBackend               string `json:"storage_backend"`
-	StorageBackendMemory         string
-	StorageBackendLocal          string
-	StorageBackendLocalStoryFile string
-	FullStorySource              string `json:"full_story_source"`
-	LanguageFilePattern          string `json:"language_file_pattern"`
-	ApiKeyFilePattern            string `json:"apikey_file_pattern"`
-	Target                       string `json:"target"`
+	ApiKey                          string
+	LanguageString                  string `json:"language"`
+	Language                        *Language
+	DataDirectory                   string `json:"data_directory"`
+	LogFile                         string `json:"log_file"`
+	StorageBackend                  string `json:"storage_backend"`
+	StorageBackendMemory            string
+	StorageBackendLocal             string
+	StorageBackendLocalStoryFile    string `json:"storage_backend_local_story_file"`
+	StorageBackendLocalChatFile     string `json:"storage_backend_local_chat_file"`
+	StorageBackendLocalUserFile     string `json:"storage_backend_local_user_file"`
+	StorageBackendLocalLastChatFile string `json:"storage_backend_local_lastchat_file"`
+	FullStorySource                 string `json:"full_story_source"`
+	LanguageFilePattern             string `json:"language_file_pattern"`
+	ApiKeyFilePattern               string `json:"apikey_file_pattern"`
+	Target                          string `json:"target"`
 
 	MessageMinLength int `json:"message_length_minimum"`
 	MessageMaxLength int `json:"message_length_maximum"`
@@ -63,9 +66,9 @@ type Configuration struct {
 
 	TgCommandStart       string
 	TgCommandPrefix      string
-	HelpMessageDelimeter string
-	TextDelimeter        string
-	WordSplittingLength  int `json:"word_splitting_length"`
+	HelpMessageDelimeter string `json:"help_message_delimeter"`
+	WordDelimeter        string `json:"word_delimeter"`
+	WordSplittingLength  int    `json:"word_splitting_length"`
 
 	ErrorStorageBackendUnknown string
 }
@@ -74,17 +77,11 @@ func newConfiguration() *Configuration {
 	conf := new(Configuration)
 	conf.Language = new(Language)
 
-	conf.LogFile = "log.txt"
-
 	conf.StorageBackendMemory = "memory"
 	conf.StorageBackendLocal = "filesystem"
-	conf.StorageBackendLocalStoryFile = "story.txt"
 
 	conf.TgCommandStart = "start"
 	conf.TgCommandPrefix = "/"
-
-	conf.HelpMessageDelimeter = " - "
-	conf.TextDelimeter = " "
 
 	conf.ErrorStorageBackendUnknown = "Unknown Storage Backend"
 

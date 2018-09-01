@@ -11,16 +11,24 @@ var stores map[string]Store
 var readingStore Store
 var writingStores []Store
 
-func keepChatUser(store Store, update MessageUpdate) {
-	store.AddChat(update.Message.Chat.ID)
-	store.AddUser(update.Message.From.UserName)
+func keepChatUser(store Store, update MessageUpdate, keep ...bool) (bool, bool) {
+	var newChat, newUser bool
+
+	if len(keep) < 1 || keep[0] {
+		newChat = store.AddChat(update.Message.Chat.ID)
+	}
+	if len(keep) < 2 || keep[1] {
+		newUser = store.AddUser(update.Message.From.UserName)
+	}
+
+	return newChat, newUser
 }
 
 func AddChatUser(update MessageUpdate) {
-	keepChatUser(readingStore, update)
+	newChat, newUser := keepChatUser(readingStore, update)
 
 	for _, store := range writingStores {
-		keepChatUser(store, update)
+		keepChatUser(store, update, newChat, newUser)
 	}
 }
 

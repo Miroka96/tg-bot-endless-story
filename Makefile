@@ -10,7 +10,7 @@ build-container:
 	docker build -t $(IMAGE) .
 
 test-container:
-	docker run -v $(VOLUME):$(MOUNTPATH) $(IMAGE)
+	docker run -v $(VOLUME):$(MOUNTPATH) --rm $(IMAGE)
 
 build-test-container: build-container test-container
 

@@ -11,7 +11,7 @@ func GetStory() string {
 }
 
 func shortenStory(story string, maxLength int) string {
-	storyWords := strings.SplitAfter(story, Conf.TextDelimeter)
+	storyWords := strings.SplitAfter(story, Conf.WordDelimeter)
 
 	shortStory := ""
 	length := 0

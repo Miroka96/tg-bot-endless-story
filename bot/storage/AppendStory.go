@@ -4,12 +4,20 @@ import (
 	. "../common"
 	. "./common"
 	"strings"
+	"unicode"
+	"unicode/utf8"
 )
+
+func startsWithPunctuationMark(str string) bool {
+	// https://www.compart.com/de/unicode/category/Po - List of Unicode Punctuation Marks
+	firstRune, _ := utf8.DecodeRuneInString(str)
+	return unicode.IsPunct(firstRune)
+}
 
 func cleanMessage(message string) (string, string) {
 	message = strings.TrimSpace(message)
 	storedMessage := message
-	if readingStore.GetStory() != "" {
+	if !startsWithPunctuationMark(message) && readingStore.GetStory() != "" {
 		storedMessage = " " + message
 	}
 	return storedMessage, message
