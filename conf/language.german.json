@@ -19,6 +19,7 @@
   "message_too_long" : "So lange Sätze kann ich mir beim besten Willen nicht merken...",
   "message_missing_spaces" : "Mehr Wörter wären nett...",
   "not_permitted" : "Das lässt du bitte.",
-  "full_story" : "... %s\n\nDie Post ist mir zu teuer geworden, deshalb findest du die komplette Geschichte unter:\n%s",
+  "shortened_story_prefix" : "... ",
+  "full_story" : "%s\n\nDie Post ist mir zu teuer geworden, deshalb findest du die komplette Geschichte unter:\n%s",
   "no_story_yet" : "Es gibt noch keine Geschichte... Du darfst dir also eine neue Welt ausdenken.\n\nAllem Anfang wohnt ein Zauber inne."
 }

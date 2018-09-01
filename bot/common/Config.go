@@ -36,6 +36,7 @@ type Language struct {
 	NotPermitted                         string `json:"not_permitted"`
 	FullStoryText                        string `json:"full_story"`
 	NoStoryYet                           string `json:"no_story_yet"`
+	ShortenedStoryPrefix                 string `json:"shortened_story_prefix"`
 }
 
 type Configuration struct {
