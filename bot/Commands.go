@@ -3,6 +3,7 @@ package bot
 import (
 	. "./commands"
 	. "./common"
+	"./storage"
 	"strings"
 )
 
@@ -29,6 +30,7 @@ func processCommand(update MessageUpdate) Messages {
 
 func processMessage(update MessageUpdate) Messages {
 	LogUpdate(update)
+	storage.AddChatUser(update)
 
 	if strings.HasPrefix(update.Message.Text, "/") {
 		return processCommand(update)
